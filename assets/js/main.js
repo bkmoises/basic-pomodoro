@@ -11,13 +11,6 @@ function createPomodoro() {
 
     start() {
       this.startPomodoro();
-      this.setTimer();
-    },
-
-    keepData() {
-      const timerJSON = JSON.stringify([this.minutes, this.seconds, this.times, this.pause]);
-      localStorage.setItem('setTimer', timerJSON);
-      console.log(timerJSON)
     },
 
     startTimer() {
@@ -48,11 +41,9 @@ function createPomodoro() {
           };
         };
 
-        this.keepData()
-
         this.timer.innerHTML = (`${this.minutes.toString().padStart(2, 0)}:${this.seconds.toString().padStart(2, 0)}`);
 
-      }, 1);
+      }, 1000);
 
     },
 
@@ -87,7 +78,6 @@ function createPomodoro() {
     mainPomodoro() {
       clearInterval(this.timerCtrl);
       this.startBtn.innerHTML = "Começar";
-      alert("Hora de descansar")
     },
 
     pausePomodoro() {
@@ -115,8 +105,8 @@ function createPomodoro() {
 
     restartPomodoro() {
       this.times = 0;
-      this.minutes = 24;
-      this.seconds = 59;
+      this.minutes = 25;
+      this.seconds = 0;
       this.pause = false;
 
       this.rmRestartBtn();
