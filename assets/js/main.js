@@ -1,82 +1,128 @@
-const timerEl = document.querySelector('.timer');
-const startBtn = document.querySelector('.start');
-let timer;
-let minutes = 0
-let seconds = 10;
-let times = 0;
-let pause = false;
+function createPomodoro() {
+  return {
+    startBtn: document.querySelector('.start'),
+    timer: document.querySelector('.timer'),
+    div: document.querySelector('div'),
+    minutes: 25,
+    seconds: 0,
+    times: 0,
+    timerCtrl: 0,
+    pause: false,
 
-function startPomodoro() {
-  timer = setInterval(function() {
+    start() {
+      this.startPomodoro();
+    },
 
-    seconds--;
+    startTimer() {
+      this.timerCtrl = setInterval(() => {
+        this.seconds--;
 
-    if (!minutes && !seconds) {
-      clearInterval(timer);
-      pause = !pause;
+        if (this.seconds === -1) {
+          this.seconds = 59;
+          this.minutes--;
+        };
 
-      if (pause && times == 4) {
-        minutes = 24;
-        seconds = 59;
-        times = 0;
-        timerEl.innerHTML = "00:00"
-        startBtn.innerText = "Começar";
-        return;
-      } else if (pause) {
-        minutes = 4
-        seconds = 59;
-        timerEl.innerHTML = "00:00"
-        startBtn.innerText = "Começar";
-        return;
-      } else {
-        minutes = 14;
-        seconds = 59;
-        times++;
-        timerEl.innerHTML = "00:00"
-        startBtn.innerText = "Começar";
-        return;
-      };
+        if (this.minutes === -1) {
 
-    };
+          this.mainPomodoro();
+          this.pause = !this.pause;
 
-    if (!seconds) {
-      seconds = 59;
-      minutes--;
-      };
+          if (this.pause && this.times == 4) {
+            this.minutes = 15;
+            this.seconds = 00;
+            this.times = 0;
+          } else if (this.pause) {
+            this.minutes = 5;
+            this.seconds = 00;
+          } else {
+            this.minutes = 25;
+            this.seconds = 00;
+            this.times++;
+          };
+        };
 
-    timerEl.innerHTML = (`${minutes.toString().padStart(2, 0)}:${seconds.toString().padStart(2, 0)}`)
+        this.timer.innerHTML = (`${this.minutes.toString().padStart(2, 0)}:${this.seconds.toString().padStart(2, 0)}`);
 
+      }, 1);
 
-  }, 1000);
+    },
 
+    startPomodoro() {
+      document.addEventListener('click', e => {
+        const el = e.target;
+
+        if (el.textContent === "Começar") {
+          this.startTimer();
+          this.pausePomodoro();
+          return;
+        };
+
+        if (el.textContent === "Pausar") {
+          this.resumePomodoro();
+          return;
+        };
+
+        if (el.textContent === "Retornar") {
+          this.returnPomodoro();
+          return;
+        };
+
+        if (el.textContent === "Reiniciar") {
+          this.restartPomodoro();
+          return;
+        };
+
+      });
+    },
+
+    mainPomodoro() {
+      clearInterval(this.timerCtrl);
+      this.startBtn.innerHTML = "Começar";
+      alert("Hora de descansar");
+    },
+
+    pausePomodoro() {
+      this.startBtn.innerHTML = 'Pausar';
+    },
+
+    resumePomodoro() {
+      clearInterval(this.timerCtrl);
+
+      const restartBtnText = document.createTextNode("Reiniciar");
+      const restartBtn = document.createElement('button');
+
+      restartBtn.appendChild(restartBtnText);
+      restartBtn.classList.add('restart');
+
+      this.div.appendChild(restartBtn);
+      this.startBtn.innerHTML = "Retornar";
+    },
+
+    returnPomodoro() {
+      this.startTimer();
+      this.rmRestartBtn();
+      this.pausePomodoro();
+    },
+
+    restartPomodoro() {
+      this.times = 0;
+      this.minutes = 24;
+      this.seconds = 59;
+      this.pause = false;
+
+      this.rmRestartBtn();
+
+      this.timer.innerHTML = "25:00";
+      this.startBtn.innerHTML = "Começar";
+    },
+
+    rmRestartBtn() {
+      const el = document.querySelector('.restart');
+      el.remove();
+    },
+
+  };
 };
 
-document.addEventListener('click', function(e) {
-  const el = e.target;
-
-  if (el.textContent === "Começar") {
-    clearInterval(timer);
-    startBtn.innerText = 'Pausar';
-    const elm = document.createElement("button")
-    const elmText = document.createTextNode("Pausar");
-    elm.appendChild(elmText);
-
-    const body = document.querySelector("div");
-    body.appendChild(elm);
-
-    elm2 = document.createElement('button');
-    const elmText2 = document.createTextNode("Reiniciar");
-    elm2.appendChild(elmText2);
-
-    body.appendChild(elm2);
-
-    startPomodoro();
-  };
-
-  if (el.classList.contains('pause')) {
-    clearInterval(timer);
-  }
-
-
-
-});
+const pomodoro = createPomodoro();
+pomodoro.start();
