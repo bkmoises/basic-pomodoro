@@ -11,6 +11,13 @@ function createPomodoro() {
 
     start() {
       this.startPomodoro();
+      this.setTimer();
+    },
+
+    keepData() {
+      const timerJSON = JSON.stringify([this.minutes, this.seconds, this.times, this.pause]);
+      localStorage.setItem('setTimer', timerJSON);
+      console.log(timerJSON)
     },
 
     startTimer() {
@@ -40,6 +47,8 @@ function createPomodoro() {
             this.times++;
           };
         };
+
+        this.keepData()
 
         this.timer.innerHTML = (`${this.minutes.toString().padStart(2, 0)}:${this.seconds.toString().padStart(2, 0)}`);
 
@@ -78,7 +87,7 @@ function createPomodoro() {
     mainPomodoro() {
       clearInterval(this.timerCtrl);
       this.startBtn.innerHTML = "Começar";
-      alert("Hora de descansar");
+      alert("Hora de descansar")
     },
 
     pausePomodoro() {
