@@ -2,6 +2,9 @@
 
 [![NPM](https://img.shields.io/npm/l/react)](https://github.com/devsuperior/sds1-wmazoni/blob/master/LICENSE)
 
+## Link do projeto
+[link do projeto](https://bkmoises.github.io/basic-pomodoro/ "Site do Projeto Basic Pomodoro").
+
 # Sobre o projeto
 
 Basic Pomodoro é uma aplicação web construida como projeto pessoal para teste de conhecimentos básicos de javaScript.
